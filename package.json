@@ -1,0 +1,44 @@
+{
+  "name": "@enginerd/http-server",
+  "version": "1.0.0",
+  "description": "Simple, safe single-file local web server ",
+  "bin": {
+    "http-server": "http-server.js"
+  },
+  "main": "http-server.js",
+  "types": "http-server.d.ts",
+  "type": "module",
+  "files": [
+    "LICENSE",
+    "README.md",
+    "http-server.js",
+    "http-server.js.map",
+    "http-server.d.ts"
+  ],
+  "scripts": {
+    "build": "sh build-livereload.sh && esbuild --format=esm --define:DEBUG=false --define:WITH_LIVERELOAD=true --define:VERSION=$(node -p 'JSON.stringify(require(\"./package.json\").version)') --minify --bundle --platform=node --target=node20 --sourcemap --sources-content=false --banner:js='#!/usr/bin/env node' --outfile=serve-http.js src/main.js && chmod +x serve-http.js",
+    "build-dev": "sh build-livereload.sh && esbuild --format=esm --define:DEBUG=true --define:WITH_LIVERELOAD=true --define:VERSION=$(node -p 'JSON.stringify(require(\"./package.json\").version)') --bundle --platform=node --target=node20 --sourcemap --sources-content=false --banner:js='#!/usr/bin/env node\ntry { import 'source-map-support/register' }catch(_){};' --outfile=serve-http.js src/main.js && chmod +x serve-http.js",
+    "build-dev-watch": "sh build-livereload.sh && esbuild --format=esm --watch --define:DEBUG=true --define:WITH_LIVERELOAD=true --define:VERSION=$(node -p 'JSON.stringify(require(\"./package.json\").version)') --bundle --platform=node --target=node20 --sourcemap --sources-content=false --banner:js='#!/usr/bin/env node\ntry { import 'source-map-support/register' }catch(_){};' --outfile=serve-http.js src/main.js && chmod +x serve-http.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/en9inerd/serve-http.git"
+  },
+  "keywords": [
+    "http",
+    "server"
+  ],
+  "author": "Vladimir Loskutov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/en9inerd/serve-http/issues"
+  },
+  "homepage": "https://github.com/en9inerd/serve-http#readme",
+  "devDependencies": {
+    "esbuild": "^0.20.2",
+    "livereload-js": "^4.0.2"
+  },
+  "optionalDependencies": {
+    "source-map-support": "^0.5.21"
+  }
+}
