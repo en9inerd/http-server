@@ -3,18 +3,18 @@ import fs from 'node:fs/promises';
 import os from 'node:os';
 
 export const dlog = (
-  DEBUG ? function() {
+  DEBUG ? function () {
     if (typeof arguments[0] == 'string') {
       console.log('D ' + fmt.apply(null, arguments));
     } else {
       console.log.apply(console, ['D'].concat([].slice.call(arguments)));
     }
-  } : function(){}
+  } : function () { }
 );
 
 
 export function die(err) {
-  console.error((!err || typeof err == 'string') ? err : String(err.stack||err));
+  console.error((!err || typeof err == 'string') ? err : String(err.stack || err));
   process.exit(1);
 }
 

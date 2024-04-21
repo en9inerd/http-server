@@ -674,7 +674,7 @@ function initAsClient(websocket, address, protocols, options) {
   if (!protocolVersions.includes(opts.protocolVersion)) {
     throw new RangeError(
       `Unsupported protocol version: ${opts.protocolVersion} ` +
-        `(supported versions: ${protocolVersions.join(', ')})`
+      `(supported versions: ${protocolVersions.join(', ')})`
     );
   }
 
@@ -1123,7 +1123,7 @@ function sendAfterClose(websocket, data, cb) {
   if (cb) {
     const err = new Error(
       `WebSocket is not open: readyState ${websocket.readyState} ` +
-        `(${readyStates[websocket.readyState]})`
+      `(${readyStates[websocket.readyState]})`
     );
     process.nextTick(cb, err);
   }

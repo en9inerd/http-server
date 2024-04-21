@@ -4,20 +4,18 @@
 
 Simple single-file local web server
 
-`npm i -g serve-http`
+`npm i -g @enginerd/http-server`
 
 - Single file without dependencies — copy it into your project.
 - Livereload — HTML pages reload automatically in web browsers as they change.
 - Safety feature: Only serves local connections unless given explicit command-line argument.
 - Safety feature: Refuses to serve directories outside home directory to remote connections.
 
-Install through [`npm i -g serve-http`](https://www.npmjs.com/package/serve-http) or by copying
-[`serve-http`](https://raw.githubusercontent.com/rsms/serve-http/master/serve-http)
-into your project (no dependencies; entire thing contained in a single small file.)
+Install through [`npm i -g @enginerd/http-server`](https://www.npmjs.com/package/@enginerd/http-server)
 
 ```
-$ ./serve-http -help
-Usage: serve-http [options] [<dir>]
+$ ./http-server -help
+Usage: http-server [options] [<dir>]
 
 <dir>
   Directory to serve files from. Defaults to the current directory.
@@ -35,13 +33,13 @@ Options:
 
 Examples:
 
-  serve-http
+  http-server
     Serve current directory on some available port
 
-  serve-http -p 8080 docs
+  http-server -p 8080 docs
     Serve directory ./docs locally on port 8080
 
-  serve-http -public -no-dirlist
+  http-server -public -no-dirlist
     Serve current directory publicly on some available port,
     without directory listing.
 
@@ -49,13 +47,14 @@ Examples:
 
 ## JavaScript API
 
-serve-http can also be used as a library:
+http-server can also be used as a library:
 
 ```js
-const { createServer } = require("serve-http")
-const server = createServer({ pubdir: __dirname, port: 1234 })
+import { createServer } from "@enginerd/http-server";
+const __dirname = import.meta.dirname;
+const server = createServer({ pubdir: __dirname, port: 1234, showServingMessage: true });
 // `server` is a standard nodejs http server instance.
 ```
 
 See TypeScript type definitions for documentation of the API:
-[`serve-http.d.ts`](serve-http.d.ts)
+[`http-server.d.ts`](http-server.d.ts)

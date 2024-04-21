@@ -1,10 +1,10 @@
 import { Writable } from 'stream';
 import { PerMessageDeflate } from './permessage-deflate.js';
-import { 
-  BINARY_TYPES, 
-  EMPTY_BUFFER, 
-  kStatusCode, 
-  kWebSocket 
+import {
+  BINARY_TYPES,
+  EMPTY_BUFFER,
+  kStatusCode,
+  kWebSocket
 } from './constants.js';
 import { concat, toArrayBuffer, unmask } from './buffer-util.js';
 import { isValidStatusCode, isValidUTF8 } from './validation.js';

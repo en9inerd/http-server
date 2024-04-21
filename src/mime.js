@@ -51,11 +51,11 @@ export const extToMimeType = {
   'ninja': plainText,
   'md': markdown, 'markdown': markdown, 'mdown': markdown,
   'yaml': yaml, 'yml': yaml,
-  'rb':  'text/ruby',
-  'ts':  'text/typescript',
-  'sh':  'text/x-sh',
-  'go':  'text/x-go',
-  'py':  'text/x-python',
+  'rb': 'text/ruby',
+  'ts': 'text/typescript',
+  'sh': 'text/x-sh',
+  'go': 'text/x-go',
+  'py': 'text/x-python',
   'php': 'text/x-php',
 };
 

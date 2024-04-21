@@ -5,4 +5,4 @@ export const kForOnEventAttribute = Symbol('kIsForOnEventAttribute');
 export const kListener = Symbol('kListener');
 export const kStatusCode = Symbol('status-code');
 export const kWebSocket = Symbol('websocket');
-export const NOOP = () => {};
+export const NOOP = () => { };

@@ -83,7 +83,7 @@ export class WebSocketServer extends EventEmitter {
     ) {
       throw new TypeError(
         'One and only one of the "port", "server", or "noServer" options ' +
-          'must be specified'
+        'must be specified'
       );
     }
 
@@ -363,7 +363,7 @@ export class WebSocketServer extends EventEmitter {
     if (socket[kWebSocket]) {
       throw new Error(
         'server.handleUpgrade() was called more than once with the same ' +
-          'socket, possibly due to a misconfiguration'
+        'socket, possibly due to a misconfiguration'
       );
     }
 
@@ -504,11 +504,11 @@ function abortHandshake(socket, code, message, headers) {
 
   socket.end(
     `HTTP/1.1 ${code} ${http.STATUS_CODES[code]}\r\n` +
-      Object.keys(headers)
-        .map((h) => `${h}: ${headers[h]}`)
-        .join('\r\n') +
-      '\r\n\r\n' +
-      message
+    Object.keys(headers)
+      .map((h) => `${h}: ${headers[h]}`)
+      .join('\r\n') +
+    '\r\n\r\n' +
+    message
   );
 }
 

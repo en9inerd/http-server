@@ -320,9 +320,9 @@ export class Sender {
         rsv1 &&
         perMessageDeflate &&
         perMessageDeflate.params[
-          perMessageDeflate._isServer
-            ? 'server_no_context_takeover'
-            : 'client_no_context_takeover'
+        perMessageDeflate._isServer
+          ? 'server_no_context_takeover'
+          : 'client_no_context_takeover'
         ]
       ) {
         rsv1 = byteLength >= perMessageDeflate._threshold;

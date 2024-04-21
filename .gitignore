@@ -6,3 +6,4 @@ report.*
 /node_modules
 /_*
 /build
+http-server.js*

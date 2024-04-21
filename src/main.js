@@ -7,7 +7,7 @@ function usage() {
   let prog = v[0].endsWith('node') ? path.relative(process.cwd(), path.resolve(v[1])) : v[0];
   const progl = './' + prog;
   if (process.env['_'] == progl) {
-    // common case: ./serve-http (in cwd)
+    // common case: ./http-server (in cwd)
     prog = progl;
   }
   prog = path.basename(prog);
@@ -40,7 +40,7 @@ Examples:
     Serve current directory publicly on some available port,
     without directory listing.
 
-  `.trim()+'\n';
+  `.trim() + '\n';
   if (!WITH_LIVERELOAD) {
     s = s.replace(/^\s+livereload.+\n/g, '');
   }

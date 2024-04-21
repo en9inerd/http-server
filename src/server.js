@@ -14,8 +14,6 @@ import { realpathSync } from 'node:fs';
 let pubdir = '';  // absolute path
 let server = null;
 let livereloadServer = null;
-const log = ()=>{};
-
 
 export function createServer(opts) {
   opts = opts ? Object.assign({}, opts) : {}; // copy
@@ -23,11 +21,11 @@ export function createServer(opts) {
   opts.port = opts.port && opts.port > 0 ? opts.port : undefined;
   opts.livereload = (
     opts.livereload && typeof opts.livereload == 'object' ? opts.livereload :
-    { disable: opts.livereload !== undefined && !opts.livereload }
+      { disable: opts.livereload !== undefined && !opts.livereload }
   );
   opts.dirlist = (
     opts.dirlist && typeof opts.dirlist == 'object' ? opts.dirlist :
-    { disable: opts.dirlist !== undefined && !opts.dirlist }
+      { disable: opts.dirlist !== undefined && !opts.dirlist }
   );
 
   pubdir = path.resolve(opts.pubdir || '.');
@@ -46,7 +44,7 @@ export function createServer(opts) {
   ]);
 
   const handler2 = (req, res) => handler(req, res).catch(err => {
-    console.error('Internal server error:', err.stack||String(err));
+    console.error('Internal server error:', err.stack || String(err));
     return endResponse(res, 500, `Internal server error: ${err}`);
   });
 
@@ -60,8 +58,8 @@ export function createServer(opts) {
       const msg = checkSafePubdir(pubdir);
       if (msg) {
         die('Refusing to allow external connections for security reasons:\n  ' +
-            msg.replace(/\.$/,'.') + '.' +
-            '\n  Set -public to ignore this safeguard. Please be careful.');
+          msg.replace(/\.$/, '.') + '.' +
+          '\n  Set -public to ignore this safeguard. Please be careful.');
       }
     }
   }
@@ -74,9 +72,9 @@ export function createServer(opts) {
     if (WITH_LIVERELOAD && !opts.livereload.disable) {
       lrport = (
         opts.livereload.port ? opts.livereload.port :
-        opts.port ? Math.min(65535, opts.port + 10000) :
-        addr.port >= 65535 ? addr.port - 1 :
-        addr.port + 1
+          opts.port ? Math.min(65535, opts.port + 10000) :
+            addr.port >= 65535 ? addr.port - 1 :
+              addr.port + 1
       );
       startLivereloadServer(lrport, opts.host);
     }
@@ -150,7 +148,7 @@ function formHandlerChain(handlers) {
   return handlers.reduce((prev, next) =>
     (req, res) =>
       prev(req, res).then((req1, res1) =>
-        next(req1||req, res1||res) )
+        next(req1 || req, res1 || res))
   );
 }
 

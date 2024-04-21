@@ -50,7 +50,7 @@ const defaultExts = [
 ];
 const defaultExclusions = [/\.git\//, /\.svn\//, /\.hg\//, /\.DS_Store/];
 
-const dlog = DEBUG ? (s, str) => { s.config.debug && console.log(str); } : function(){};
+const dlog = DEBUG ? (s, str) => { s.config.debug && console.log(str); } : function () { };
 
 export class Server extends EventEmitter {
   constructor(config) {
@@ -114,8 +114,8 @@ export class Server extends EventEmitter {
 
   onConnection(socket) {
     dlog(this, 'Browser connected.');
-    socket.on('message', (function(_this) {
-      return function(message) {
+    socket.on('message', (function (_this) {
+      return function (message) {
         var data, request;
         dlog(_this, 'Client message: ' + message);
         request = JSON.parse(message);
@@ -134,13 +134,13 @@ export class Server extends EventEmitter {
         }
       };
     })(this));
-    socket.on('error', (function(_this) {
-      return function(err) {
+    socket.on('error', (function (_this) {
+      return function (err) {
         return dlog(_this, 'Error in client socket: ' + err);
       };
     })(this));
-    return socket.on('close', (function(_this) {
-      return function(message) {
+    return socket.on('close', (function (_this) {
+      return function (message) {
         return dlog(_this, 'Client closed connection');
       };
     })(this));
@@ -163,8 +163,8 @@ export class Server extends EventEmitter {
     fileext = path.extname(filepath).substring(1);
     if (exts.indexOf(fileext) !== -1) {
       if (this.config.delay) {
-        return delayedRefresh = setTimeout((function(_this) {
-          return function() {
+        return delayedRefresh = setTimeout((function (_this) {
+          return function () {
             clearTimeout(delayedRefresh);
             return _this.refresh(filepath);
           };
@@ -230,7 +230,7 @@ export function createServer(config, callback) {
   if (config == null) {
     config = {};
   }
-  requestHandler = function(req, res) {
+  requestHandler = function (req, res) {
     if (url.parse(req.url).pathname === '/livereload.js') {
       res.writeHead(200, {
         'Content-Type': 'text/javascript'
