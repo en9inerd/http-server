@@ -1,6 +1,6 @@
 {
   "name": "@enginerd/http-server",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Simple, safe single-file local web server ",
   "bin": {
     "http-server": "http-server.js"
