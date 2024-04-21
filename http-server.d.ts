@@ -27,9 +27,6 @@ export interface ServerConfig {
 
   // disable or customize directory listing
   dirlist?: DirlistOptions | boolean
-
-  // disable or customize livereload
-  livereload?: LiveReloadOptions | boolean
 }
 
 export interface DirlistOptions {
@@ -38,14 +35,6 @@ export interface DirlistOptions {
 
   // include files which name starts with "."
   showHidden?: boolean
-}
-
-export interface LiveReloadOptions {
-  // disable livereload
-  disable?: boolean
-
-  // livereload server bind port. (default based on server port)
-  port?: number
 }
 
 // Start a server

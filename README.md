@@ -7,7 +7,6 @@ Simple single-file local web server
 `npm i -g @enginerd/http-server`
 
 - Single file without dependencies — copy it into your project.
-- Livereload — HTML pages reload automatically in web browsers as they change.
 - Safety feature: Only serves local connections unless given explicit command-line argument.
 - Safety feature: Refuses to serve directories outside home directory to remote connections.
 
@@ -25,7 +24,6 @@ Options:
   -host <host>      Bind to <host> instead of "localhost"
   -public           Accept connections from anywhere (same as -host "")
   -q, -quiet        Don't log requests
-  -no-livereload    Disable livereload
   -no-dirlist       Disable directory listing
   -dirlist-hidden   Show files beginning with "." in directory listings
   -h, -help         Show help and exit

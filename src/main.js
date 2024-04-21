@@ -22,7 +22,6 @@ Options:
   -host <host>      Bind to <host> instead of "localhost"
   -public           Accept connections from anywhere (same as -host "")
   -q, -quiet        Don't log requests
-  -no-livereload    Disable livereload
   -no-dirlist       Disable directory listing
   -dirlist-hidden   Show files beginning with "." in directory listings
   -h, -help         Show help and exit
@@ -41,9 +40,6 @@ Examples:
     without directory listing.
 
   `.trim() + '\n';
-  if (!WITH_LIVERELOAD) {
-    s = s.replace(/^\s+livereload.+\n/g, '');
-  }
   console.log(s);
   process.exit(0);
 }
@@ -54,7 +50,6 @@ const opts = {
   host: 'localhost',
   public: false,
   q: false, quiet: false,
-  noLivereload: false,
   noDirlist: false,  // disable directory listing
   dirlistHidden: false,
   version: false,
@@ -92,10 +87,7 @@ function main() {
     dirlist: {
       disable: opts.noDirlist,
       showHidden: opts.dirlistHidden,
-    },
-    livereload: {
-      disable: opts.noLivereload,
-    },
+    }
   });
 
   // stop server and exit cleanly on ^C

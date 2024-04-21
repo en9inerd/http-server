@@ -2,8 +2,6 @@ import { extToMimeType } from './mime.js';
 import { checkSafePubdir } from './safe.js';
 import { die, addrToURL, dlog, stat } from './util.js';
 import { createDirectoryListingHTML } from './dirlist.js';
-import { createServer as createLivereloadServer } from './livereload.js';
-import livereloadJSBody from '../build/livereload-script.js';
 import { createServer as createHttpServer } from 'node:http';
 import { parse as urlparse } from 'node:url';
 import path from 'node:path';
@@ -13,16 +11,11 @@ import { realpathSync } from 'node:fs';
 
 let pubdir = '';  // absolute path
 let server = null;
-let livereloadServer = null;
 
 export function createServer(opts) {
   opts = opts ? Object.assign({}, opts) : {}; // copy
   opts.host = opts.host || (opts.public ? '' : 'localhost');
   opts.port = opts.port && opts.port > 0 ? opts.port : undefined;
-  opts.livereload = (
-    opts.livereload && typeof opts.livereload == 'object' ? opts.livereload :
-      { disable: opts.livereload !== undefined && !opts.livereload }
-  );
   opts.dirlist = (
     opts.dirlist && typeof opts.dirlist == 'object' ? opts.dirlist :
       { disable: opts.dirlist !== undefined && !opts.dirlist }
@@ -67,18 +60,6 @@ export function createServer(opts) {
   server.listen(opts.port, opts.host, () => {
     const addr = server.address();
 
-    // livereload port
-    let lrport = 0;
-    if (WITH_LIVERELOAD && !opts.livereload.disable) {
-      lrport = (
-        opts.livereload.port ? opts.livereload.port :
-          opts.port ? Math.min(65535, opts.port + 10000) :
-            addr.port >= 65535 ? addr.port - 1 :
-              addr.port + 1
-      );
-      startLivereloadServer(lrport, opts.host);
-    }
-
     if (opts.showServingMessage) {
       let dir = path.relative('.', pubdir);
       if (dir[0] != '.') {
@@ -92,9 +73,8 @@ export function createServer(opts) {
           dir = '~' + dir.substr(homedir.length);
         }
       }
-      const lrmsg = lrport ? ` (livereload on :${lrport})` : '';
       console.log(
-        `serving %s%s at %s/${lrmsg}`,
+        `serving %s%s at %s`,
         dir,
         server.localOnly ? '' : ' PUBLICLY TO THE INTERNET',
         addrToURL(addr)
@@ -112,26 +92,8 @@ export function createServer(opts) {
     // }, 100)
   });
 
-  server.once('close', () => {
-    if (livereloadServer)
-      livereloadServer.close();
-  });
-
   return server;
 }
-
-
-function startLivereloadServer(port, bindHost) {
-  if (WITH_LIVERELOAD) {
-    livereloadServer = createLivereloadServer({
-      port,
-      bindHost,
-    }, () => {
-      livereloadServer.watch(pubdir);
-    });
-  }
-}
-
 
 function formHandlerChain(handlers) {
   // [ h1, h2, h3 ]
@@ -220,35 +182,11 @@ async function handleRequest(req, res) {
   }
 
   if (req.method === 'GET' || req.method === 'HEAD') {
-    if (WITH_LIVERELOAD && livereloadServer && req.pathname == '/livereload.js') {
-      return handleGETLivereload(req, res);
-    }
     return handleGETFileRequest(req, res);
   }
 
   endResponse(res, 500, `Unsupported method ${req.method}`);
 }
-
-
-let livereloadRes = null;
-
-async function handleGETLivereload(req, res) {
-  if (WITH_LIVERELOAD) {
-    if (!livereloadRes) {
-      const body = Buffer.from(livereloadJSBody, 'utf8');
-      livereloadRes = {
-        body,
-        header: {
-          'Content-Type': 'text/javascript',
-          'Content-Length': String(body.length),
-        }
-      };
-    }
-    res.writeHead(200, livereloadRes.header);
-    res.end(livereloadRes.body);
-  }
-}
-
 
 async function handleGETFileRequest(req, res) {
   const filename = path.join(pubdir, req.pathname);
@@ -327,11 +265,6 @@ async function serveFile(req, res, filename, st) {
   res.setHeader('Content-Type', mimeType);
   res.setHeader('Last-Modified', st.mtime.toUTCString());
   res.setHeader('ETag', etag(st));
-
-  if (mimeType == 'text/html' && !opts.nolivereload) {
-    body = preprocessHtml(body);
-  }
-
   res.setHeader('Content-Length', body.length);
 
   if (req.method == 'HEAD') {
@@ -398,19 +331,4 @@ async function serveDir(req, res, filename, st) {
 
 function etag(st) {
   return `"${st.mtimeMs.toString(36)}-${st.ino.toString(36)}-${st.size.toString(36)}"`;
-}
-
-
-function preprocessHtml(body) {
-  // add livereload script to html
-  let s = body.toString('utf8');
-  let i = s.indexOf('</head>');
-  if (i == -1) { i = s.indexOf('</body>'); }
-  if (i != -1) {
-    const port = livereloadServer.config.port;
-    const script = `<script async src="/livereload.js?port=${port}"></script>`;
-    s = s.substr(0, i) + script + s.substr(i);
-    body = Buffer.from(s, 'utf8');
-  }
-  return body;
 }
