@@ -2,21 +2,23 @@
 import { inspect } from 'node:util';
 
 const formatters = {
-  s:   String,
-  j:   JSON.stringify,
-  j_:  (v, n) => JSON.stringify(v, null, n),
-  r:   inspect,
-  r_:  inspect,
-  q:   v => JSON.stringify(String(v)),
-  n:   Number,
-  f:   Number,
-  f_:  (v, n) => Number(v).toFixed(n),
-  i:   Math.round,
-  d:   Math.round,
-  x:   v => Math.round(v).toString(16),
-  X:   v => Math.round(v).toString(16).toUpperCase(),
+  s: String,
+  j: JSON.stringify,
+  // biome-ignore lint/suspicious/noExplicitAny: JSON.stringify argument is any
+  j_: (v: any, n?: string | number) => JSON.stringify(v, null, n),
+  r: inspect,
+  r_: inspect,
+  // biome-ignore lint/suspicious/noExplicitAny: JSON.stringify argument is any
+  q: (v: any) => JSON.stringify(String(v)),
+  n: Number,
+  f: Number,
+  // biome-ignore lint/suspicious/noExplicitAny: Number argument is any
+  f_: (v: any, n?: number) => Number(v).toFixed(n),
+  i: Math.round,
+  d: Math.round,
+  x: (v: number) => Math.round(v).toString(16),
+  X: (v: number) => Math.round(v).toString(16).toUpperCase(),
 };
-
 
 // fmt formats a string
 //
@@ -38,24 +40,26 @@ const formatters = {
 // A value that is a function is called and its return value is used.
 //
 // fmt(format :string, ...args :any[]) :string
-export function fmt(format, ...args) {
+export function fmt(format: string, ...args: string[]): string {
   let index = 0;
-  let s = format.replace(/%(?:([sjrqnfidxX%])|(\d+)([jrf]))/g, (s, ...m) => {
+  let s = format.replace(/%(?:([sjrqnfidxX%])|(\d+)([jrf]))/g, (_, ...m: string[]) => {
     let spec = m[0];
-    if (spec == '%') {
+    if (spec === '%') {
       return '%';
     } else if (!spec) {
       // with leading number
       spec = m[2];
     }
-    if (index == args.length) {
+    if (index === args.length) {
       throw new Error(`superfluous parameter %${spec} at offset ${m[3]}`);
     }
     let v = args[index++];
-    if (typeof v == 'function') {
-      v = v();
+    if (typeof v === 'function') {
+      v = (<CallableFunction>v)();
     }
-    return m[0] ? formatters[spec](v) : formatters[spec + '_'](v, parseInt(m[1]));
+
+    // @ts-ignore
+    return m[0] ? formatters[spec](v) : formatters[`${spec}_`](v, Number.parseInt(m[1]));
   });
   if (index < args.length) {
     // throw new Error(`superfluous arguments`)

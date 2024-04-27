@@ -1,5 +1,3 @@
-import { Server } from "http"
-
 export interface ServerConfig {
   // bind to port. If falsy, some free user-space port is assigned
   port?: number
@@ -27,6 +25,9 @@ export interface ServerConfig {
 
   // disable or customize directory listing
   dirlist?: DirlistOptions | boolean
+
+  // emulate slow connection
+  emulateSlowConnection?: boolean
 }
 
 export interface DirlistOptions {
@@ -36,6 +37,3 @@ export interface DirlistOptions {
   // include files which name starts with "."
   showHidden?: boolean
 }
-
-// Start a server
-export function createServer(config?: ServerConfig): Server

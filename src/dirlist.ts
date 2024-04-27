@@ -1,24 +1,24 @@
 import path from 'node:path';
 import fs from 'node:fs/promises';
+import type { DirlistOptions } from './types.js';
 
-const htmlEntities = {
+const htmlEntities: Record<string, string> = {
   '&': '&amp;',
   '<': '&lt;',
   '>': '&gt;',
   '"': '&quot;',
 };
 
-function htmlescape(s) {
+function htmlescape(s: string) {
   return s.replace(/[&<>"']/g, m => htmlEntities[m]);
 }
 
-// f(filename :string, pathname :string, opts :DirlistOptions) :Promise<string>
-export async function createDirectoryListingHTML(filename, pathname, opts) {
-  const ents = await fs.readdir(filename, {withFileTypes:true, encoding:'utf8'});
+export async function createDirectoryListingHTML(filename: string, pathname: string, opts: DirlistOptions): Promise<string> {
+  const ents = await fs.readdir(filename, { withFileTypes: true, encoding: 'utf8' });
   const files = [];
   for (const f of ents) {
     let name = f.name;
-    if (!opts.showHidden && name[0] == '.') {
+    if (!opts.showHidden && name[0] === '.') {
       continue;
     }
 
@@ -29,21 +29,21 @@ export async function createDirectoryListingHTML(filename, pathname, opts) {
       try {
         const target = await fs.readlink(path.join(filename, f.name));
         extra = ` <span class="symlink" title="symlink">&rarr; ${htmlescape(target)}</span>`;
-      } catch (_) { /* empty */ };
+      } catch (_) { };
     }
 
     files.push(`<li><a href="${encodeURI(pathname + name)}">${htmlescape(name)}</a>${extra}</li>`);
   }
 
-  if (pathname != '/') {
+  if (pathname !== '/') {
     files.unshift('<li><a href="..">..</a></li>');
   }
 
-  let title = [];
+  let title: string[] | string = [];
   const pathComponents = pathname.split('/').filter(s => s.length > 0);
   let pardir = '/';
   for (const c of pathComponents) {
-    const dir = pardir + c + '/';
+    const dir = `${pardir + c}/`;
     pardir = dir;
     title.push(`<a href="${htmlescape(dir)}">${htmlescape(c)}</a>`);
   }

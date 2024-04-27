@@ -55,4 +55,4 @@ const server = createServer({ pubdir: __dirname, port: 1234, showServingMessage:
 ```
 
 See TypeScript type definitions for documentation of the API:
-[`http-server.d.ts`](http-server.d.ts)
+[`types.d.ts`](types.d.ts)

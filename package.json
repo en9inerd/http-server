@@ -1,24 +1,24 @@
 {
   "name": "@enginerd/http-server",
-  "version": "1.0.2",
+  "version": "1.1.2",
   "description": "Simple, safe single-file local web server ",
   "bin": {
     "http-server": "http-server.js"
   },
   "main": "http-server.js",
-  "types": "http-server.d.ts",
+  "types": "types.d.ts",
   "type": "module",
   "files": [
     "LICENSE",
     "README.md",
     "http-server.js",
     "http-server.js.map",
-    "http-server.d.ts"
+    "types.d.ts"
   ],
   "scripts": {
-    "build": "esbuild --format=esm --define:DEBUG=false --define:VERSION=$(node -p 'JSON.stringify(require(\"./package.json\").version)') --minify --bundle --platform=node --target=node20 --sourcemap --sources-content=false --banner:js='#!/usr/bin/env node' --outfile=http-server.js src/main.js && chmod +x http-server.js",
-    "build-dev": "esbuild --format=esm --define:DEBUG=true --define:VERSION=$(node -p 'JSON.stringify(require(\"./package.json\").version)') --bundle --platform=node --target=node20 --sourcemap --sources-content=false --banner:js='#!/usr/bin/env node\ntry { import(\"source-map-support/register.js\") }catch(_){};' --outfile=http-server.js src/main.js && chmod +x http-server.js",
-    "build-dev-watch": "esbuild --format=esm --watch --define:DEBUG=true --define:VERSION=$(node -p 'JSON.stringify(require(\"./package.json\").version)') --bundle --platform=node --target=node20 --sourcemap --sources-content=false --banner:js='#!/usr/bin/env node\ntry { import(\"source-map-support/register.js\") }catch(_){};' --outfile=http-server.js src/main.js && chmod +x http-server.js"
+    "build": "esbuild --format=esm --define:DEBUG=false --define:VERSION=$(node -p 'JSON.stringify(require(\"./package.json\").version)') --minify --bundle --platform=node --target=node20 --sourcemap --sources-content=false --banner:js='#!/usr/bin/env node' --outfile=http-server.js src/main.ts && chmod +x http-server.js",
+    "build-dev": "esbuild --format=esm --define:DEBUG=true --define:VERSION=$(node -p 'JSON.stringify(require(\"./package.json\").version)') --bundle --platform=node --target=node20 --sourcemap --sources-content=false --banner:js='#!/usr/bin/env node\ntry { import(\"source-map-support/register.js\") }catch(_){};' --outfile=http-server.js src/main.ts && chmod +x http-server.js",
+    "build-dev-watch": "esbuild --format=esm --watch --define:DEBUG=true --define:VERSION=$(node -p 'JSON.stringify(require(\"./package.json\").version)') --bundle --platform=node --target=node20 --sourcemap --sources-content=false --banner:js='#!/usr/bin/env node\ntry { import(\"source-map-support/register.js\") }catch(_){};' --outfile=http-server.js src/main.ts && chmod +x http-server.js"
   },
   "repository": {
     "type": "git",
@@ -36,7 +36,9 @@
   "homepage": "https://github.com/en9inerd/http-server#readme",
   "devDependencies": {
     "@biomejs/biome": "1.7.1",
-    "esbuild": "^0.20.2"
+    "@types/node": "^20.12.7",
+    "esbuild": "^0.20.2",
+    "typescript": "^5.4.5"
   },
   "optionalDependencies": {
     "source-map-support": "^0.5.21"

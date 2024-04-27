@@ -5,13 +5,13 @@ import path from 'node:path';
 function usage() {
   const v = process.argv;
   let prog = v[0].endsWith('node') ? path.relative(process.cwd(), path.resolve(v[1])) : v[0];
-  const progl = './' + prog;
-  if (process.env['_'] == progl) {
+  const progl = `./${prog}`;
+  if (process.env._ === progl) {
     // common case: ./http-server (in cwd)
     prog = progl;
   }
   prog = path.basename(prog);
-  let s = `
+  const s = `${`
 Usage: ${prog} [options] [<dir>]
 
 <dir>
@@ -39,7 +39,7 @@ Examples:
     Serve current directory publicly on some available port,
     without directory listing.
 
-  `.trim() + '\n';
+  `.trim()}\n`;
   console.log(s);
   process.exit(0);
 }
@@ -71,7 +71,7 @@ function main() {
     pubdir = args[0];
   }
 
-  if (opts.public && opts.host == 'localhost') {
+  if (opts.public && opts.host === 'localhost') {
     opts.host = '';
   }
 

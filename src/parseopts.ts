@@ -1,27 +1,32 @@
 import { die } from './util.js';
 
-export function parseopts(argv, opts, usage) {
+export function parseopts(
+  argv: string[],
+  opts: Record<string, boolean | string | number>,
+  usage: CallableFunction
+) {
   const args = [];
   for (let i = 0; i < argv.length; i++) {
     const arg = argv[i];
-    if (arg[0] == '-') {
+    if (arg[0] === '-') {
       let k = arg.replace(/^-+/, '');
-      if (k == 'h' || k == 'help') {
+      if (k === 'h' || k === 'help') {
         usage();
       }
       if (!(k in opts)) {
-        k = k.replace(/-(\w)/g, (_, m) => m[0].toUpperCase());
+        k = k.replace(/-(\w)/g, (_: string, m: string[]) => m[0].toUpperCase());
       }
       if (k in opts) {
         const t = typeof opts[k];
-        let v = true;
-        if (t != 'boolean') {
-          if ((v = argv[++i]) === undefined) {
+        let v: boolean | string | number = true;
+        if (t !== 'boolean') {
+          v = argv[++i];
+          if (v === undefined) {
             die(`missing value for option ${arg}`);
           }
-          if (t == 'number') {
+          if (t === 'number') {
             v = Number(v);
-            if (isNaN(v)) {
+            if (Number.isNaN(v)) {
               die(`invalid value ${argv[i]} for option ${arg} (not a number)`);
             }
           }
