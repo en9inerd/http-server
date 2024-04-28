@@ -37,3 +37,6 @@ export interface DirlistOptions {
   // include files which name starts with "."
   showHidden?: boolean
 }
+
+// Start a server
+export function createServer(opts?: ServerConfig): Server
